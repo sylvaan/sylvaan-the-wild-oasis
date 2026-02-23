@@ -19,12 +19,6 @@ const StyledFormRow = styled.div`
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
 `;
 
 const Label = styled.label<{ htmlFor?: string }>`
@@ -36,25 +30,22 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-import type { ReactElement } from "react";
-// ... imports
-
-// ... imports
+import { type ReactNode, isValidElement } from "react";
 
 interface FormRowProps {
   label?: string;
   error?: string;
-  children: ReactElement<{ id?: string }>; // Enforce single ReactElement with optional id prop
-  id?: string;
+  children: ReactNode;
 }
 
 function FormRow({ label, error, children }: FormRowProps) {
-  // We can safely access children.props.id because we typed it as ReactElement
-  const childId = children.props.id;
-  
+  const childId = isValidElement(children)
+    ? (children.props as { id?: string }).id
+    : undefined;
+
   return (
     <StyledFormRow>
-      {label && <Label htmlFor={childId}>{label}</Label>}
+      {label ? <Label htmlFor={childId}>{label}</Label> : <span></span>}
       {children}
       {error && <Error>{error}</Error>}
     </StyledFormRow>

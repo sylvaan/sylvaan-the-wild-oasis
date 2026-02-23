@@ -10,7 +10,7 @@ const sizes = {
   `,
   medium: css`
     font-size: 1.4rem;
-    padding: 1.2rem 1.6rem;
+    padding: 1.2rem 2.4rem;
     font-weight: 500;
   `,
   large: css`
@@ -56,8 +56,8 @@ const Button = styled.button<{
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
 
-  ${(props) => sizes[props.size!]}
-  ${(props) => variations[props.variation!]}
+  ${(props) => sizes[props.size || "medium"]}
+  ${(props) => variations[props.variation || "primary"]}
 `;
 
 Button.defaultProps = {
