@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getSettings, updateSetting } from "../../services/apiSettings";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateSetting } from "../../services/apiSettings";
+import { useSettings } from "./useSettings";
 import type { Settings } from "../../services/apiSettings";
 import Spinner from "../../ui/Spinner";
 import Form from "../../ui/Form";
@@ -11,14 +12,7 @@ import Button from "../../ui/Button";
 import toast from "react-hot-toast";
 
 function UpdateSettingsForm() {
-  const {
-    isLoading,
-    error,
-    data: settings = {},
-  } = useQuery({
-    queryKey: ["settings"],
-    queryFn: getSettings,
-  });
+  const { isLoading, error, settings = {} } = useSettings();
 
   const queryClient = useQueryClient();
 

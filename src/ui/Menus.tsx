@@ -140,7 +140,7 @@ function List({ id, children }: { id: string; children: React.ReactNode }) {
   );
 }
 
-function Button({ children, icon, onClick }: { children: React.ReactNode; icon?: React.ReactNode; onClick?: () => void }) {
+function Button({ children, icon, onClick, disabled }: { children: React.ReactNode; icon?: React.ReactNode; onClick?: () => void; disabled?: boolean; }) {
   const context = useContext(MenusContext);
   if (!context) throw new Error("Button must be used within Menus");
   const { close } = context;
@@ -152,7 +152,7 @@ function Button({ children, icon, onClick }: { children: React.ReactNode; icon?:
 
   return (
     <li>
-      <StyledButton onClick={handleClick}>
+      <StyledButton onClick={handleClick} disabled={disabled}>
         {icon}
         <span>{children}</span>
       </StyledButton>
