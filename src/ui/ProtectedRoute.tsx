@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { useUser } from "../features/authentication/useUser";
+import Spinner from "./Spinner";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-// For now, this just renders children. We will add authentication logic later.
 const FullPage = styled.div`
   height: 100vh;
   background-color: var(--color-grey-50);
@@ -14,21 +17,30 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const navigate = useNavigate();
+
   // 1. Load the authenticated user
-  const isAuthenticated = true; // Temporary mock
+  const { isLoading, isAuthenticated } = useUser();
 
   // 2. If there is NO authenticated user, redirect to the /login
-  if (!isAuthenticated) {
-    // return <Navigate to="/login" />;
+  useEffect(
+    function () {
+      if (!isAuthenticated && !isLoading) navigate("/login");
+    },
+    [isAuthenticated, isLoading, navigate]
+  );
+
+  // 3. While loading, show a spinner
+  if (isLoading)
     return (
       <FullPage>
-        <p>Redirecting...</p>
+        <Spinner />
       </FullPage>
     );
-  }
 
-  // 3. If there IS a user, render the app
+  // 4. If there IS a user, render the app
   if (isAuthenticated) return children;
 }
 
 export default ProtectedRoute;
+
