@@ -20,7 +20,21 @@ const DarkModeWrapper = styled.div`
   right: 2.4rem;
 `;
 
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useUser } from "../features/authentication/useUser";
+
 function Login() {
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useUser();
+
+  useEffect(
+    function () {
+      if (isAuthenticated && !isLoading) navigate("/dashboard");
+    },
+    [isAuthenticated, isLoading, navigate]
+  );
+
   return (
     <LoginLayout>
       <DarkModeWrapper>
