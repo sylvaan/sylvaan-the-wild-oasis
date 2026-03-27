@@ -5,25 +5,16 @@ import { deleteCabin } from "../../services/apiCabins";
 import type { Cabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import { formatCurrency } from "../../utils/helpers";
-import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import Modal from "../../ui/Modal";
-import ConfirmDelete from "../../ui/ConfirmDelete";import Menus from "../../ui/Menus";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Menus from "../../ui/Menus";
+import Table from "../../ui/Table";
 
 
 
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
 
 const Img = styled.img`
   display: block;
@@ -59,7 +50,7 @@ const Discount = styled.div`
 // ... styled components ...
 
 function CabinRow({ cabin }: { cabin: Cabin }) {
-  const [showForm, setShowForm] = useState(false);
+
   const {
     id: cabinId,
     name,
@@ -86,26 +77,29 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
 
   return (
     <>
-      <TableRow role="row">
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{discount ? formatCurrency(discount) : "—"}</Discount>
-        <div>
-          <Modal>
-            <Menus.Menu>
-              <Menus.Toggle id={cabinId.toString()} />
-              <Menus.List id={cabinId.toString()}>
-                <Menus.Button icon={<HiPencil />} onClick={() => setShowForm((show) => !show)}>
-                  Edit cabin
-                </Menus.Button>
-                
-                <Modal.Open opens="delete">
-                  <Menus.Button icon={<HiTrash />}>Delete cabin</Menus.Button>
-                </Modal.Open>
-              </Menus.List>
-            </Menus.Menu>
+    <Table.Row>
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <Discount>{discount ? formatCurrency(discount) : "—"}</Discount>
+      <div>
+        <Modal>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinId.toString()} />
+            <Menus.List id={cabinId.toString()}>
+              <Modal.Open opens="edit">
+                <Menus.Button icon={<HiPencil />}>Edit cabin</Menus.Button>
+              </Modal.Open>
+
+              <Modal.Open opens="delete">
+                <Menus.Button icon={<HiTrash />}>Delete cabin</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+
+            <Modal.Window name="edit">
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
 
             <Modal.Window name="delete">
               <ConfirmDelete
@@ -114,10 +108,11 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
                 onConfirm={() => mutate(cabinId)}
               />
             </Modal.Window>
-          </Modal>
-        </div>
-      </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} onClose={() => setShowForm(false)} />}
+          </Menus.Menu>
+        </Modal>
+      </div>
+    </Table.Row>
+
     </>
   );
 }

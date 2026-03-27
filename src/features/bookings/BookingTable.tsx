@@ -3,44 +3,15 @@ import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
 import Pagination from "../../ui/Pagination";
-import { useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getBookings } from "../../services/apiBookings";
 import Spinner from "../../ui/Spinner";
+import { useBookings } from "./useBookings";
 
 function BookingTable() {
-  const [searchParams] = useSearchParams();
-
-  // FILTER
-  const filterValue = searchParams.get("status");
-  const filter =
-    !filterValue || filterValue === "all"
-      ? null
-      : { field: "status", value: filterValue };
-
-  // SORT
-  const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
-  const [field, direction] = sortByRaw.split("-");
-  const sortBy = { field, direction };
-
-  // PAGINATION
-  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
-
-  const {
-    isLoading,
-    data,
-    error,
-  } = useQuery({
-    queryKey: ["bookings", filter, sortBy, page],
-    queryFn: () => getBookings({ filter, sortBy, page }),
-  });
+  const { isLoading, bookings, count, error } = useBookings();
 
   if (isLoading) return <Spinner />;
   if (error) return <Empty resourceName="bookings" />;
-  
-  // getBookings returns { data, count }
-  const bookings = data?.data;
-  const count = data?.count;
+
 
   if (!bookings?.length) return <Empty resourceName="bookings" />;
 

@@ -1,37 +1,30 @@
-# The Wild Oasis 🌲
+# 🌲 The Wild Oasis | Internal Dashboard
 
-A boutique cabin hotel management application.
+A comprehensive, full-stack internal management system designed for **The Wild Oasis**, a boutique luxury cabin resort. This application serves as the primary tool for resort staff to manage cabins, bookings, guests, and administrative settings.
 
-> Based on the "The Ultimate React Course 2024: React, Redux & More" by Jonas Schmedtmann.
+This project is the centerpiece of **Jonas Schmedtmann's "The Ultimate React Course"**, showcasing advanced patterns in React, performance optimization, and professional state management with TanStack Query.
 
-## Features
+## ✨ Key Features
 
-- **Dashboard**: Statistics on bookings, sales, check-ins, and occupancy rates (Upcoming).
-- **Cabins**: Manage cabin inventory (CRUD), including photo uploads and pricing.
-- **Bookings**: Manage guest bookings, including filtering, sorting, and pagination.
-- **Check-in & Check-out**: Streamlined process for staff to confirm payments, add optional breakfast, and update booking status.
-- **Authentication & Authorization**: Secure user login, account creation, and protected application routes.
-- **Settings**: Application-wide configurations (breakfast price, min/max nights).
+- **Dynamic Dashboard**: Real-time statistics on recent bookings, sales, check-ins, and occupancy rates via interactive charts.
+- **Cabin Management**: Full CRUD operations for cabin inventory, including detailed pricing and automated photo uploads to Supabase storage.
+- **Booking Control System**: Advanced filtering, sorting, and pagination for guest bookings. Integrated check-in/check-out workflows.
+- **Guest Management**: Comprehensive database of guest records and their stay history.
+- **Administrative Settings**: Global configuration for resort-wide rules (breakfast prices, minimum/maximum stay durations, etc.).
+- **Professional UI/UX**: A sleek, dark-mode-ready interface built with Styled Components and interactive data visualizations via Recharts.
+- **Secure Authentication**: Robust staff login system with Supabase Auth and protected application routes.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Framework**: React + TypeScript + Vite
-- **State Management**: TanStack Query (React Query)
-- **Styling**: Styled Components
-- **Routing**: React Router DOM v6
-- **Forms**: React Hook Form
-- **Backend**: Supabase (Database, Auth, and Storage)
-- **Security**: Row Level Security (RLS) enabled on all database tables.
+- **Framework**: [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **State Management**: [TanStack Query](https://tanstack.com/query/latest) (React Query) for seamless remote state synchronization.
+- **Styling**: [Styled Components](https://styled-components.com/) for a highly modular and Maintainable design system.
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/) for efficient, performant form management.
+- **Charts**: [Recharts](https://recharts.org/) for beautiful, responsive data visualization.
+- **Backend**: [Supabase](https://supabase.com/) (PostgreSQL Database, Auth, and Cloud Storage).
+- **Date Handling**: [date-fns](https://date-fns.org/)
 
-## Getting Started
 
-1.  Clone the repository.
-2.  Run `npm install`.
-3.  Run `npm run dev` to start the local server.
+## 📖 Acknowledgments
 
-## Project Structure
-
-- `src/features`: Business logic (Cabins, Bookings, etc.)
-- `src/pages`: Application routes
-- `src/ui`: Reusable UI components
-- `src/services`: API services (Supabase)
+Developed during **Jonas Schmedtmann's "The Ultimate React Course"**. This project represents a deep dive into building production-ready management applications with the modern React ecosystem.
