@@ -12,11 +12,21 @@ const StyledSidebar = styled.aside`
   gap: 3.2rem;
 `;
 
+const StyledVersion = styled.p`
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-grey-400);
+  text-align: center;
+  margin-top: auto;
+`;
+
 function Sidebar() {
   return (
     <StyledSidebar>
       <Logo />
       <MainNav />
+
+      <StyledVersion>v{__APP_VERSION__}</StyledVersion>
     </StyledSidebar>
   );
 }
