@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -25,10 +26,10 @@ interface CabinFormData {
 
 function CreateCabinForm({
   cabinToEdit = {} as Cabin,
-  onClose,
+  onCloseModal,
 }: {
   cabinToEdit?: Cabin;
-  onClose?: () => void;
+  onCloseModal?: () => void;
 }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
@@ -49,13 +50,16 @@ function CreateCabinForm({
 
   const queryClient = useQueryClient();
 
+  const navigate = useNavigate();
+
   const { mutate: createCabin, isPending: isCreating } = useMutation({
     mutationFn: (newCabin: NewCabin) => createEditCabin(newCabin),
     onSuccess: () => {
       toast.success("New cabin successfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
       reset();
-      onClose?.();
+      onCloseModal?.();
+      navigate("/cabins");
     },
     onError: (err) => toast.error(err.message),
   });
@@ -67,7 +71,8 @@ function CreateCabinForm({
       toast.success("Cabin successfully edited");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
       reset();
-      onClose?.();
+      onCloseModal?.();
+      navigate("/cabins");
     },
     onError: (err) => toast.error(err.message),
   });
@@ -186,7 +191,7 @@ function CreateCabinForm({
 
       <FormRow>
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "1.2rem" }}>
-          <Button variation="secondary" type="reset" onClick={() => onClose?.()}>
+          <Button variation="secondary" type="reset" onClick={() => onCloseModal?.()}>
             Cancel
           </Button>
           <Button size="medium" variation="primary" type="submit" disabled={isWorking}>

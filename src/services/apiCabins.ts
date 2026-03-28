@@ -22,8 +22,7 @@ export interface NewCabin {
 
 export async function createEditCabin(newCabin: NewCabin, id?: string) {
   const hasImagePath = Boolean(
-    typeof newCabin.image === "string" &&
-    newCabin.image?.startsWith?.(supabaseUrl),
+    typeof newCabin.image === "string" && newCabin.image?.startsWith?.("http"),
   );
 
   const imageName = hasImagePath
