@@ -3,9 +3,11 @@ import { format, isToday } from "date-fns";
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiOutlineCheckCircle,
+  HiOutlineClock,
   HiOutlineCurrencyDollar,
   HiOutlineHomeModern,
 } from "react-icons/hi2";
+
 
 import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
@@ -113,8 +115,10 @@ function BookingDataBox({ booking }: { booking: any }) {
     extrasPrice,
     totalPrice,
     hasBreakfast,
+    isEarlyCheckin,
     observations,
     isPaid,
+
     guests: { fullName: guestName, email, country, countryFlag, nationalID },
     cabins: { name: cabinName },
   } = booking;
@@ -162,6 +166,10 @@ function BookingDataBox({ booking }: { booking: any }) {
         <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
+        <DataItem icon={<HiOutlineClock />} label="Early check-in (8 AM)?">
+          {isEarlyCheckin ? "Yes" : "No"}
+        </DataItem>
+
 
         <Price isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>

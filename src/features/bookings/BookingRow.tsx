@@ -4,7 +4,7 @@ import { format, isToday } from "date-fns";
 import Tag from "../../ui/Tag.tsx";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import { formatCurrency } from "../../utils/helpers";
+import { formatCurrency, isWithinCheckinWindow } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import { HiEye, HiArrowDownOnSquare, HiArrowUpOnSquare, HiTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +43,7 @@ const Amount = styled.div`
 function BookingRow({
   booking: {
     id: bookingId,
+    created_at: createdAt,
     startDate,
     endDate,
     numNights,
@@ -72,6 +73,11 @@ function BookingRow({
       <Stacked>
         <span>{guestName}</span>
         <span>{email}</span>
+      </Stacked>
+
+      <Stacked>
+        <span>{format(new Date(createdAt), "MMM dd yyyy")}</span>
+        <span>Registered at {format(new Date(createdAt), "p")}</span>
       </Stacked>
 
       <Stacked>
@@ -106,6 +112,7 @@ function BookingRow({
               <Menus.Button
                 icon={<HiArrowDownOnSquare />}
                 onClick={() => navigate(`/checkin/${bookingId}`)}
+                disabled={!isWithinCheckinWindow(startDate)}
               >
                 Check in
               </Menus.Button>

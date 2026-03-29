@@ -3,6 +3,7 @@
 A boutique cabin hotel management application.
 
 > Based on the "The Ultimate React Course 2025: React, Redux & More" by Jonas Schmedtmann.
+
 > Live demo can be found here: [https://sylvaan-oasis-dashboard.vercel.app](https://sylvaan-oasis-dashboard.vercel.app)
 
 ## Features

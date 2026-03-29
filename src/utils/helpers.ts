@@ -25,6 +25,20 @@ export const getToday = function (options: { end?: boolean } = {}) {
   return today.toISOString();
 };
 
+// Returns YYYY-MM-DD string for comparison with Supabase 'date' type
+export const getTodayDateOnly = () => new Date().toISOString().split("T")[0];
+
+// Enforces the "Free Early Check-in" policy (starting at 08:00 AM on the startDate)
+export const isWithinCheckinWindow = (startDate: string) => {
+  const today = getTodayDateOnly();
+  if (startDate > today) return false; // Early check-in not allowed for future dates
+  if (startDate < today) return true; // Already past check-in date
+
+  // If it's today, check if it's after 08:00 AM
+  const currentHour = new Date().getHours();
+  return currentHour >= 8;
+};
+
 export const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",

@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSettings } from "../settings/useSettings";
 import { useCheckin } from "./useCheckin";
-import { formatCurrency } from "../../utils/helpers";
+import { formatCurrency, isWithinCheckinWindow } from "../../utils/helpers";
 
 const Box = styled.div`
   /* Box */
@@ -27,6 +27,7 @@ const Box = styled.div`
 function CheckinBooking() {
   const [confirmPaid, setConfirmPaid] = useState(false);
   const [addBreakfast, setAddBreakfast] = useState(false);
+  const [confirmEarlyCheckin, setConfirmEarlyCheckin] = useState(false);
 
   const { booking, isLoading } = useBooking();
   const { settings, isLoading: isLoadingSettings } = useSettings();
@@ -47,7 +48,10 @@ function CheckinBooking() {
     numGuests,
     hasBreakfast,
     numNights,
+    startDate,
   } = booking;
+
+  const canCheckin = isWithinCheckinWindow(startDate);
 
   const optionalBreakfastPrice =
     settings?.breakfastPrice * numNights * numGuests;
@@ -63,9 +67,14 @@ function CheckinBooking() {
           extrasPrice: optionalBreakfastPrice,
           totalPrice: totalPrice + optionalBreakfastPrice,
         },
+        isEarlyCheckIn: confirmEarlyCheckin,
       });
     } else {
-      checkin({ bookingId, breakfast: {} });
+      checkin({
+        bookingId,
+        breakfast: {},
+        isEarlyCheckIn: confirmEarlyCheckin,
+      });
     }
   }
 
@@ -78,7 +87,30 @@ function CheckinBooking() {
 
       <BookingDataBox booking={booking} />
 
-      {!hasBreakfast && (
+      {!canCheckin && (
+        <Box>
+          <p
+            style={{
+              color: "var(--color-red-700)",
+              fontWeight: 500,
+              marginBottom: "1.2rem",
+            }}
+          >
+            ⚠️ Early check-in is only available starting at 08:00 AM on the day
+            of arrival.
+          </p>
+          <Checkbox
+            checked={confirmEarlyCheckin}
+            onChange={() => setConfirmEarlyCheckin((confirm) => !confirm)}
+            id="early-checkin"
+          >
+            I confirm that this is an approved early check-in (cabin is clean
+            and ready).
+          </Checkbox>
+        </Box>
+      )}
+
+      {(canCheckin || confirmEarlyCheckin) && !hasBreakfast && (
         <Box>
           <Checkbox
             checked={addBreakfast}
@@ -93,28 +125,35 @@ function CheckinBooking() {
         </Box>
       )}
 
-      <Box>
-        <Checkbox
-          checked={confirmPaid}
-          onChange={() => setConfirmPaid((confirm) => !confirm)}
-          disabled={confirmPaid || isCheckingIn}
-          id="confirm"
-        >
-          I confirm that {guests.fullName} has paid the total amount of{" "}
-          {!addBreakfast
-            ? formatCurrency(totalPrice)
-            : `${formatCurrency(
-                totalPrice + optionalBreakfastPrice
-              )} (${formatCurrency(totalPrice)} + ${formatCurrency(
-                optionalBreakfastPrice
-              )})`}
-        </Checkbox>
-      </Box>
+      {(canCheckin || confirmEarlyCheckin) && (
+        <Box>
+          <Checkbox
+            checked={confirmPaid}
+            onChange={() => setConfirmPaid((confirm) => !confirm)}
+            disabled={confirmPaid || isCheckingIn}
+            id="confirm"
+          >
+            I confirm that {guests.fullName} has paid the total amount of{" "}
+            {!addBreakfast
+              ? formatCurrency(totalPrice)
+              : `${formatCurrency(
+                  totalPrice + optionalBreakfastPrice
+                )} (${formatCurrency(totalPrice)} + ${formatCurrency(
+                  optionalBreakfastPrice
+                )})`}
+          </Checkbox>
+        </Box>
+      )}
 
       <ButtonGroup>
-        <Button onClick={handleCheckin} disabled={!confirmPaid || isCheckingIn}>
-          Check in booking #{bookingId}
-        </Button>
+        {(canCheckin || confirmEarlyCheckin) && (
+          <Button
+            onClick={handleCheckin}
+            disabled={!confirmPaid || isCheckingIn}
+          >
+            Check in booking #{bookingId}
+          </Button>
+        )}
         <Button variation="secondary" onClick={() => navigate(-1)}>
           Back
         </Button>
