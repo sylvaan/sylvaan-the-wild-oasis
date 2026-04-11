@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "../../services/apiCabins";
-import type { Cabin } from "../../services/apiCabins";
+import type { Cabin } from "../../services/types";
 import toast from "react-hot-toast";
 import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";

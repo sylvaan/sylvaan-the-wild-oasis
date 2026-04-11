@@ -39,7 +39,7 @@ function CheckinBooking() {
     if (booking?.isPaid) setConfirmPaid(true);
   }, [booking?.isPaid]);
 
-  if (isLoading || isLoadingSettings) return <Spinner />;
+  if (isLoading || isLoadingSettings || !booking) return <Spinner />;
 
   const {
     id: bookingId,
@@ -67,13 +67,11 @@ function CheckinBooking() {
           extrasPrice: optionalBreakfastPrice,
           totalPrice: totalPrice + optionalBreakfastPrice,
         },
-        isEarlyCheckIn: confirmEarlyCheckin,
       });
     } else {
       checkin({
         bookingId,
         breakfast: {},
-        isEarlyCheckIn: confirmEarlyCheckin,
       });
     }
   }

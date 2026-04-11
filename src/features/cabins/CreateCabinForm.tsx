@@ -10,8 +10,9 @@ import FormRow from "../../ui/FormRow";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEditCabin } from "../../services/apiCabins";
-import type { Cabin, NewCabin } from "../../services/apiCabins";
+import type { Cabin, NewCabin } from "../../services/types";
 import toast from "react-hot-toast";
+import { compressImage } from "../../utils/helpers";
 
 // ... imports
 
@@ -79,8 +80,15 @@ function CreateCabinForm({
 
   const isWorking = isCreating || isEditing;
 
-  function onSubmit(data: CabinFormData) {
-    const image = typeof data.image === "string" ? data.image : data.image[0];
+  async function onSubmit(data: CabinFormData) {
+    let image = typeof data.image === "string" ? data.image : data.image[0];
+
+    // Compress image if it's a new file
+    if (image instanceof File) {
+      toast.loading("Compressing image...", { id: "compression" });
+      image = await compressImage(image);
+      toast.success("Image compressed", { id: "compression" });
+    }
 
     if (isEditSession)
       editCabin({ newCabinData: { ...data, image }, id: editId });

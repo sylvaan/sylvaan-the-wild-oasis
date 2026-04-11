@@ -5,6 +5,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import {
   Area,
   AreaChart,
+  Brush,
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
@@ -101,6 +102,7 @@ function SalesChart({ bookings, numDays }: SalesChartProps) {
             name="Extras sales"
             unit="$"
           />
+          <Brush dataKey="label" height={30} stroke="#4f46e5" />
         </AreaChart>
       </ResponsiveContainer>
     </StyledSalesChart>

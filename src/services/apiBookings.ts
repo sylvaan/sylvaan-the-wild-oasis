@@ -1,5 +1,6 @@
 import { getToday, getTodayDateOnly } from "../utils/helpers";
 import supabase from "./supabase";
+import type { Booking, BookingSummary } from "./types";
 
 interface BookingParams {
   filter: { field: string; value: string; method?: string } | null;
@@ -7,7 +8,11 @@ interface BookingParams {
   page: number;
 }
 
-export async function getBookings({ filter, sortBy, page }: BookingParams) {
+export async function getBookings({
+  filter,
+  sortBy,
+  page,
+}: BookingParams): Promise<{ data: BookingSummary[]; count: number | null }> {
   let query = supabase
     .from("bookings")
     .select(
@@ -40,10 +45,10 @@ export async function getBookings({ filter, sortBy, page }: BookingParams) {
     throw new Error("Bookings could not be loaded");
   }
 
-  return { data, count };
+  return { data: data as unknown as BookingSummary[], count };
 }
 
-export async function getBooking(id: string) {
+export async function getBooking(id: string): Promise<Booking> {
   const { data, error } = await supabase
     .from("bookings")
     .select("*, cabins(*), guests(*)")
@@ -59,7 +64,7 @@ export async function getBooking(id: string) {
 }
 
 // Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
-export async function getBookingsAfterDate(date: string) {
+export async function getBookingsAfterDate(date: string): Promise<Pick<Booking, "created_at" | "totalPrice" | "extrasPrice">[]> {
   const { data, error } = await supabase
     .from("bookings")
     .select("created_at, totalPrice, extrasPrice")
@@ -112,8 +117,7 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function updateBooking(id: string, obj: Record<string, any>) {
+export async function updateBooking(id: string, obj: Partial<Booking>): Promise<Booking> {
   const { data, error } = await supabase
     .from("bookings")
     .update(obj)
@@ -125,7 +129,7 @@ export async function updateBooking(id: string, obj: Record<string, any>) {
     console.error(error);
     throw new Error("Booking could not be updated");
   }
-  return data;
+  return data as Booking;
 }
 
 export async function deleteBooking(id: string) {

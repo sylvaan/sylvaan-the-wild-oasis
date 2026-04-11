@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateSetting } from "../../services/apiSettings";
 import { useSettings } from "./useSettings";
-import type { Settings } from "../../services/apiSettings";
+import type { Settings } from "../../services/types";
 import Spinner from "../../ui/Spinner";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";

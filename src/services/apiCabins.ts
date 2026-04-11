@@ -1,24 +1,5 @@
 import supabase, { supabaseUrl } from "./supabase";
-
-export interface Cabin {
-  id: string;
-  created_at: string;
-  name: string;
-  max_capacity: number;
-  regular_price: number;
-  discount: number;
-  description: string;
-  image: string;
-}
-
-export interface NewCabin {
-  name: string;
-  maxCapacity: number;
-  regularPrice: number;
-  discount: number;
-  description: string;
-  image: File | string;
-}
+import type { Cabin, NewCabin } from "./types";
 
 export async function createEditCabin(newCabin: NewCabin, id?: string) {
   const hasImagePath = Boolean(
@@ -88,7 +69,7 @@ export async function createEditCabin(newCabin: NewCabin, id?: string) {
   return data;
 }
 
-export async function getCabins() {
+export async function getCabins(): Promise<Cabin[]> {
   const { data, error } = await supabase.from("cabins").select("*");
 
   if (error) {
@@ -99,7 +80,7 @@ export async function getCabins() {
   return data;
 }
 
-export async function deleteCabin(id: string) {
+export async function deleteCabin(id: string): Promise<null> {
   const { data, error } = await supabase.from("cabins").delete().eq("id", id);
 
   if (error) {

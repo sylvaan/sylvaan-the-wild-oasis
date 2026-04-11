@@ -11,16 +11,13 @@ export function useCheckin() {
     mutationFn: ({
       bookingId,
       breakfast,
-      isEarlyCheckIn,
     }: {
       bookingId: string;
       breakfast?: Record<string, unknown>;
-      isEarlyCheckIn?: boolean;
     }) =>
       updateBooking(bookingId, {
         status: "checked-in",
         isPaid: true,
-        isEarlyCheckIn,
         ...breakfast,
       }),
 

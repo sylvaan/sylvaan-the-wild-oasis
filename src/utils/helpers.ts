@@ -1,4 +1,5 @@
 import { formatDistance, parseISO } from "date-fns";
+import imageCompression from "browser-image-compression";
 // import { differenceInDays } from "date-fns/esm";
 
 // We want to make this function work for both Date objects and strings (which come from Supabase)
@@ -44,3 +45,17 @@ export const formatCurrency = (value: number) =>
     style: "currency",
     currency: "USD",
   }).format(value);
+
+export const compressImage = async (file: File) => {
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+  try {
+    return await imageCompression(file, options);
+  } catch (error) {
+    console.error("Image compression error:", error);
+    return file; // Fallback to original file
+  }
+};
